@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiGatewayService } from './api-gateway.service';
+import { Controller, Get, Logger } from '@nestjs/common';
 
 @Controller()
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) {}
+	private logger = new Logger(this.constructor.name);
 
-  @Get()
-  getHello(): string {
-    return this.apiGatewayService.getHello();
-  }
+	constructor() {}
+
+	@Get()
+	getHello(): string {
+		this.logger.log('Hi ...!');
+
+		return `Welcome to Nam Truong's Ultimate NestJS`;
+	}
 }

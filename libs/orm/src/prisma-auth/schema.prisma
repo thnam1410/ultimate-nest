@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_AUTH_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../../node_modules/@prisma/db-auth"
+}
+
+enum AuthServiceType {
+  Local
+  Facebook
+  Google
+  Github
+}
+
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  firstName String
+  lastName  String
+  verified  Boolean @default(false)
+  password  String?
+
+  authService AuthServiceType
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  archivedAt  Boolean         @default(false)
+}

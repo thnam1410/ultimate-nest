@@ -1,10 +1,12 @@
+import { CoreModule } from '@libs/core';
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { ApiGatewayController } from './api-gateway.controller';
-import { ApiGatewayService } from './api-gateway.service';
+import { AuthModule } from './services/auth/auth.module';
 
 @Module({
-  imports: [],
-  controllers: [ApiGatewayController],
-  providers: [ApiGatewayService],
+	imports: [JwtModule.register({ global: true }), AuthModule, CoreModule],
+	controllers: [ApiGatewayController],
+	providers: [],
 })
 export class ApiGatewayModule {}

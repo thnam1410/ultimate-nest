@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package ultimate.nest.account;
+
+service AuthService {
+	rpc Create(CreateRequest) returns (CreateResponse) {}
+	rpc Read(ReadRequest) returns (ReadResponse) {}
+
+	rpc Login(LoginRequest) returns (LoginResponse) {}
+	rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+}
+
+message CreateRequest {
+	optional string password = 1;
+	string email = 2;
+	string firstName = 3;
+	string lastName = 4;
+	LoginServiceTypes service = 5;
+	map<string, string> tokens = 6;
+}
+
+message CreateResponse {
+	optional string activationLink = 1;
+}
+
+message ReadRequest {
+	string userId = 1;
+}
+
+message ReadResponse {
+	User user = 1;
+}
+
+
+enum LoginServiceTypes {
+	Password = 0;
+	Google = 1;
+	Facebook = 2;
+	Github = 3;
+}
+message Session {
+	string id = 1;
+	string email = 2;
+	int32 created = 3;      // unix
+	int32 expires = 4;      // unix
+}
+
+// message Settings {
+// 	string stripeId = 1;
+// }
+
+message PasswordStruct
+{
+    // @inject_tag: bson:"hashed,omitempty"
+    string hashed = 1;
+}
+message AuthServices {
+	// @inject_tag: bson:"password,omitempty"
+	PasswordStruct password = 1;
+}
+
+// message EmailObject {
+// 	// @inject_tag: bson:"address,omitempty"
+// 	string address = 1;
+// 	// @inject_tag: bson:"verified,omitempty"
+// 	bool verified = 2;
+// 	// @inject_tag: bson:"primary,omitempty"
+// 	bool primary = 3;
+// 	// @inject_tag: bson:"verificationCode"
+// 	string verificationCode = 4;
+// }
+
+message User {
+	// @inject_tag: bson:"_id,omitempty"
+	string id = 1;
+	// @inject_tag: bson:"primaryEmail,omitempty"
+	string email = 2;
+	// @inject_tag: bson:"firstName,omitempty"
+	string firstName = 3;
+	// @inject_tag: bson:"lastName,omitempty"
+	string lastName = 4;
+	// @inject_tag: bson:"createdAt,omitempty"
+	google.protobuf.Timestamp createdAt = 5;
+	// @inject_tag: bson:"updatedAt,omitempty"
+	google.protobuf.Timestamp updatedAt = 6;
+	
+	bool verified = 7;
+	// @inject_tag: bson:"emails,omitempty"
+	// repeated EmailObject emails = 8;
+	// @inject_tag: bson:"services,omitempty"
+	// AuthServices services = 9;
+	// @inject_tag: bson:"settings,omitempty"
+	// Settings settings = 10;
+}
+
+message LoginTypeParams {
+	string accessToken = 1;
+	string userId = 2;
+	optional string password = 3;
+	string email = 4;
+}
+
+message LoginRequest {
+	LoginServiceTypes service = 1;
+	LoginTypeParams params = 2;
+}
+
+message LoginResponse {
+	Session session = 1;
+	User user = 2;
+}
+
+message LogoutRequest {
+	string sessionId = 1;
+}
+
+message LogoutResponse {
+	bool success = 1;
+}
