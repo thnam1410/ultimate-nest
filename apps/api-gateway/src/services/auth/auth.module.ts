@@ -1,4 +1,5 @@
 import {
+	AppCacheModule,
 	CacheManagerService,
 	GrpcModule,
 	RedisStoreConfigService,
@@ -26,9 +27,7 @@ const strategies = [
 	imports: [
 		PassportModule,
 		GrpcModule,
-		CacheModule.registerAsync({
-			useClass: RedisStoreConfigService,
-		}),
+		AppCacheModule.registerAsync({ type: 'redis' }),
 	],
 	controllers: [AuthController],
 	providers: [...strategies, AuthService, AccountService, CacheManagerService],
