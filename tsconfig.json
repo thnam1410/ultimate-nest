@@ -1,33 +1,64 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"declaration": true,
-		"removeComments": true,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"target": "ES2021",
-		"sourceMap": true,
-		"outDir": "./dist",
-		"baseUrl": "./",
-		"resolveJsonModule": true,
-		"incremental": true,
-		"skipLibCheck": true,
-		"strictNullChecks": true,
-		"noImplicitAny": false,
-		"strictBindCallApply": false,
-		"forceConsistentCasingInFileNames": false,
-		"noFallthroughCasesInSwitch": false,
-		"paths": {
-			"@libs/common": ["libs/common/src"],
-			"@libs/common/*": ["libs/common/src/*"],
-			"@libs/core": ["libs/core/src"],
-			"@libs/core/*": ["libs/core/src/*"],
-			"@libs/proto-schema": ["libs/proto-schema/src"],
-			"@libs/proto-schema/*": ["libs/proto-schema/src/*"],
-			"@libs/orm": ["libs/orm/src"],
-			"@libs/orm/*": ["libs/orm/src/*"]
-		}
-	},
-	"exclude": ["node_modules", "dist"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "resolveJsonModule": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@libs/common": [
+        "libs/common/src"
+      ],
+      "@libs/common/*": [
+        "libs/common/src/*"
+      ],
+      "@libs/core": [
+        "libs/core/src"
+      ],
+      "@libs/core/*": [
+        "libs/core/src/*"
+      ],
+      "@libs/proto-schema": [
+        "libs/proto-schema/src"
+      ],
+      "@libs/proto-schema/*": [
+        "libs/proto-schema/src/*"
+      ],
+      "@libs/orm": [
+        "libs/orm/src"
+      ],
+      "@libs/orm/*": [
+        "libs/orm/src/*"
+      ],
+      "@libs/contracts": [
+        "libs/contracts/src"
+      ],
+      "@libs/contracts/*": [
+        "libs/contracts/src/*"
+      ],
+      "@libs/repository": [
+        "libs/repository/src"
+      ],
+      "@libs/repository/*": [
+        "libs/repository/src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

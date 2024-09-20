@@ -63,6 +63,10 @@ export class AuthService {
 		}
 	}
 
+	async test() {
+		return await this.accountService.test();
+	}
+
 	private toJwtPayload(user: User): JwtPayload {
 		return {
 			sub: user.id,

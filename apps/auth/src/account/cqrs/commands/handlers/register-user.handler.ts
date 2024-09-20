@@ -4,9 +4,10 @@ import { RegisterUserCommand } from '../impl';
 import { CreateResponse, LoginServiceTypes } from '@libs/proto-schema';
 import { AuthDbContextService } from '@libs/orm/prisma-auth/auth-db-context.service';
 import { RpcException } from '@nestjs/microservices';
-import { AuthServiceType } from '@prisma/db-auth';
 import { generateVerificationCode } from '@libs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AuthServiceTypes } from '@libs/contracts';
+import { UserRegisteredEvent } from '@libs/core/cqrs';
 
 @CommandHandler(RegisterUserCommand)
 export class RegisterUserHandler
@@ -48,7 +49,7 @@ export class RegisterUserHandler
 
 			this.logger.log('Start create user...');
 
-			await this.authDbContext.user.create({
+			const newUser = await this.authDbContext.user.create({
 				data: {
 					email: cmd.email,
 					firstName: cmd.firstName,
@@ -58,6 +59,10 @@ export class RegisterUserHandler
 					authService: this.toUserAuthService(cmd.service),
 				},
 			});
+
+			this.eventBus.publish(
+				new UserRegisteredEvent({ ...newUser, activationLink }),
+			);
 
 			return { activationLink };
 		} catch (err) {
@@ -69,11 +74,11 @@ export class RegisterUserHandler
 	private toUserAuthService(service: LoginServiceTypes) {
 		switch (service) {
 			case LoginServiceTypes.Password:
-				return AuthServiceType.Local;
+				return AuthServiceTypes.Local;
 			case LoginServiceTypes.Facebook:
-				return AuthServiceType.Facebook;
+				return AuthServiceTypes.Facebook;
 			case LoginServiceTypes.Google:
-				return AuthServiceType.Google;
+				return AuthServiceTypes.Google;
 			default:
 				throw new RpcException('Invalid login service');
 		}

@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ApiGatewayModule } from './api-gateway.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { corsOptions, setupSwagger } from '@libs/common';
-import { VersioningType } from '@nestjs/common';
+import { Logger, VersioningType } from '@nestjs/common';
 async function bootstrap() {
 	const app = await NestFactory.create(ApiGatewayModule);
 
@@ -26,5 +26,6 @@ async function bootstrap() {
 	SwaggerModule.setup('swagger', app, document);
 
 	await app.listen(3000);
+	console.log('Swagger at: http://localhost:3000/swagger');
 }
 bootstrap();

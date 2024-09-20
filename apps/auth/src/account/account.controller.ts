@@ -9,13 +9,17 @@ import {
 	LogoutResponse,
 	ReadRequest,
 	ReadResponse,
+	TestRequest,
+	TestResponse,
 } from '@libs/proto-schema';
 import { Controller, Get, Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { LoginUserCommand, RegisterUserCommand } from './cqrs';
 import { GetUserByIdQuery } from './cqrs/query/impl';
+import { Metadata } from '@grpc/grpc-js';
 
+let cacheRandomOfPod: string | null = null;
 @Controller('account')
 @AuthServiceControllerMethods()
 export class AccountController implements AuthServiceController {
@@ -41,5 +45,17 @@ export class AccountController implements AuthServiceController {
 		request: LogoutRequest,
 	): LogoutResponse | Observable<LogoutResponse> | Promise<LogoutResponse> {
 		throw new Error('Method not implemented.');
+	}
+
+	async test(request: TestRequest, metadata?: Metadata): Promise<TestResponse> {
+		if (cacheRandomOfPod) {
+			return { data: cacheRandomOfPod };
+		}
+		const random = Math.random();
+
+		cacheRandomOfPod = random.toString();
+		return {
+			data: cacheRandomOfPod,
+		};
 	}
 }

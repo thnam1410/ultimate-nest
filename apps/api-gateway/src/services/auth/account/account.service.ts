@@ -58,6 +58,10 @@ export class AccountService {
 		}
 	}
 
+	async test() {
+		return await lastValueFrom(this.authRpcClient.svc.test({ name: 'abc' }));
+	}
+
 	private async createUser(
 		input: Auth.CreateRequest,
 	): Promise<Auth.CreateResponse> {

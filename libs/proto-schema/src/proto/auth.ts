@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.1
 //   protoc               v5.27.3
-// source: libs/proto-schema/src/proto/auth.proto
+// source: proto/auth.proto
 
 /* eslint-disable */
 import { Metadata } from "@grpc/grpc-js";
@@ -18,6 +18,14 @@ export enum LoginServiceTypes {
   Facebook = 2,
   Github = 3,
   UNRECOGNIZED = -1,
+}
+
+export interface TestRequest {
+  name: string;
+}
+
+export interface TestResponse {
+  data: string;
 }
 
 export interface CreateRequest {
@@ -134,6 +142,10 @@ export interface AuthServiceClient {
 
   read(request: ReadRequest, metadata?: Metadata): Observable<ReadResponse>;
 
+  /** Create a Test function return a random string */
+
+  test(request: TestRequest, metadata?: Metadata): Observable<TestResponse>;
+
   login(request: LoginRequest, metadata?: Metadata): Observable<LoginResponse>;
 
   logout(request: LogoutRequest, metadata?: Metadata): Observable<LogoutResponse>;
@@ -147,6 +159,10 @@ export interface AuthServiceController {
 
   read(request: ReadRequest, metadata?: Metadata): Promise<ReadResponse> | Observable<ReadResponse> | ReadResponse;
 
+  /** Create a Test function return a random string */
+
+  test(request: TestRequest, metadata?: Metadata): Promise<TestResponse> | Observable<TestResponse> | TestResponse;
+
   login(request: LoginRequest, metadata?: Metadata): Promise<LoginResponse> | Observable<LoginResponse> | LoginResponse;
 
   logout(
@@ -157,7 +173,7 @@ export interface AuthServiceController {
 
 export function AuthServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["create", "read", "login", "logout"];
+    const grpcMethods: string[] = ["create", "read", "test", "login", "logout"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("AuthService", method)(constructor.prototype[method], method, descriptor);

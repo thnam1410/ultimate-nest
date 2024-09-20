@@ -1,10 +1,4 @@
-import {
-	AppCacheModule,
-	CacheManagerService,
-	GrpcModule,
-	RedisStoreConfigService,
-} from '@libs/core';
-import { CacheModule } from '@nestjs/cache-manager';
+import { AppCacheModule, CacheManagerService, GrpcModule } from '@libs/core';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import {
@@ -16,6 +10,7 @@ import {
 import { AccountService } from './account/account.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { CqrsModule } from '@nestjs/cqrs';
 
 const strategies = [
 	GoogleStrategy,
@@ -25,6 +20,7 @@ const strategies = [
 ];
 @Module({
 	imports: [
+		CqrsModule,
 		PassportModule,
 		GrpcModule,
 		AppCacheModule.registerAsync({ type: 'redis' }),

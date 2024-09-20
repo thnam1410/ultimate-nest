@@ -1,4 +1,4 @@
-import { INestApplication, INestMicroservice, Logger } from '@nestjs/common';
+import { KAFKA_CONFIG } from '@libs/common';
 import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
@@ -10,11 +10,29 @@ export function getMicroServiceTransport(
 	return {
 		transport: Transport.GRPC,
 		options: {
+			url: '0.0.0.0:50051',
 			package: packageName,
-			protoPath: join(
-				process.cwd(),
-				`/libs/proto-schema/src/proto/${protoPath}`,
-			),
+			protoPath: join(`./proto/${protoPath}`),
+		},
+	};
+}
+
+type KafkaServiceName = keyof (typeof KAFKA_CONFIG)['services'];
+
+export function getKafkaConsumerSetup(
+	service: KafkaServiceName,
+): NestMicroserviceOptions & MicroserviceOptions {
+	const { clientId, groupId } = KAFKA_CONFIG.services[service];
+	return {
+		transport: Transport.KAFKA,
+		options: {
+			client: {
+				clientId,
+				brokers: [KAFKA_CONFIG.host],
+			},
+			consumer: {
+				groupId,
+			},
 		},
 	};
 }

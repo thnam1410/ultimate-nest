@@ -4,9 +4,18 @@ import "google/protobuf/timestamp.proto";
 
 package ultimate.nest.account;
 
+message TestRequest {
+	string name = 1;
+}
+message TestResponse {
+	string data = 1;
+}
+
 service AuthService {
 	rpc Create(CreateRequest) returns (CreateResponse) {}
 	rpc Read(ReadRequest) returns (ReadResponse) {}
+	//Create a Test function return a random string
+	rpc Test(TestRequest) returns (TestResponse) {}
 
 	rpc Login(LoginRequest) returns (LoginResponse) {}
 	rpc Logout(LogoutRequest) returns (LogoutResponse) {}
