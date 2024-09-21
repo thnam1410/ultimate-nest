@@ -18,21 +18,21 @@ if [ "$migration_type" == "i" ]; then
   echo "- Initiating migration..."
 
   # Run the command to initiate migration
-	_command="npx prisma migrate dev --create-only --schema ./libs/orm/src/$_schema/schema.prisma --name=$_migration_name"
+	_command="pnpx prisma migrate dev --create-only --schema ./libs/orm/src/$_schema/schema.prisma --name=$_migration_name"
   echo $_command
 	eval $_command
 elif [ "$migration_type" == "a" ]; then
   echo "- Applying migration..."
 
   # Run the command to apply migration
-	_command="npx prisma migrate dev --schema ./libs/orm/src/$_schema/schema.prisma"
+	_command="pnpx prisma migrate dev --schema ./libs/orm/src/$_schema/schema.prisma"
 	echo $_command
 	eval $_command
 elif [ "$migration_type" == "g" ]; then
   echo "- Generate migration..."
 
   # Run the command to apply migration
-	_command="npx prisma generate --schema ./libs/orm/src/$_schema/schema.prisma"
+	_command="pnpx prisma generate --schema ./libs/orm/src/$_schema/schema.prisma"
 	echo $_command
 	eval $_command
 else

@@ -37,6 +37,6 @@ lerna-debug.log*
 # For local docker development
 /.db
 tasks/.vscode/launch.json
-docker/**/volumes
-
+deploys/**/volumes
+**/*/secret.yaml
 .env

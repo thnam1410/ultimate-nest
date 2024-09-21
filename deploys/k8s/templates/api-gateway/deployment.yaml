@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels:
+    app: api-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: thnam1410/unest-api-gateway:beta
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: app-secret
+          env:
+            - name: REDIS_HOST
+              value: external-redis

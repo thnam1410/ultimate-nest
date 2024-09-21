@@ -1,15 +1,15 @@
 name: ultimate-nest
 version: '2'
 services:
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - 5432:5432
-    volumes:
-      - 'db_data:/var/lib/postgresql/data'
+  # db:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - 'db_data:/var/lib/postgresql/data'
   redis:
     image: redis
     restart: always
@@ -20,7 +20,6 @@ services:
 
   api-gateway:
     depends_on:
-      - db
       - redis
     container_name: api-gateway
     build:
@@ -40,7 +39,7 @@ services:
 
   auth:
     depends_on:
-      - db
+      - redis
     container_name: auth
     build:
       context: .
@@ -51,18 +50,16 @@ services:
         - APP=auth
     env_file:
       - .env
+    environment:
+      REDIS_HOST: redis
     restart: always
+    ports:
+      - 3001:3001
 
 volumes:
-  db_data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./docker/volumes/db
   redis_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: ./docker/volumes/redis
+      device: ./deploys/volumes/redis
