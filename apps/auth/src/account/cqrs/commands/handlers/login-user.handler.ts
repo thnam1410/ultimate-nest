@@ -1,10 +1,15 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	Logger,
+	NotFoundException,
+} from '@nestjs/common';
 import { LoginUserCommand } from '../impl';
-import { AuthDbContextService } from '@libs/orm/prisma-auth/auth-db-context.service';
 import { RpcException } from '@nestjs/microservices';
 import { LoginResponse, LoginServiceTypes } from '@libs/proto-schema';
 import { validPassword } from '@libs/common';
+import { AuthDbContextService } from '@libs/orm/prisma-auth';
 
 @CommandHandler(LoginUserCommand)
 export class LoginUserHandler implements ICommandHandler<LoginUserCommand> {

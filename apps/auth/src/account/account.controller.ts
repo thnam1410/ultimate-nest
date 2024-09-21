@@ -18,15 +18,18 @@ import { Observable } from 'rxjs';
 import { LoginUserCommand, RegisterUserCommand } from './cqrs';
 import { GetUserByIdQuery } from './cqrs/query/impl';
 import { Metadata } from '@grpc/grpc-js';
+import { AuthDbContextService } from '@libs/orm/prisma-auth';
 
 let cacheRandomOfPod: string | null = null;
 @Controller('account')
 @AuthServiceControllerMethods()
 export class AccountController implements AuthServiceController {
 	private logger = new Logger(this.constructor.name);
+
 	constructor(
 		private readonly commandBus: CommandBus,
 		private readonly queryBus: QueryBus,
+		private a: AuthDbContextService,
 	) {}
 
 	async create(request: CreateRequest) {

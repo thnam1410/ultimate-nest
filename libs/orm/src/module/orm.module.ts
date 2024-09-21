@@ -4,7 +4,7 @@ import {
 	InternalServerErrorException,
 	Module,
 } from '@nestjs/common';
-import { AuthDbContextService } from '../prisma-auth/auth-db-context.service';
+import { AuthDbContextService } from '../prisma-auth';
 
 export enum Database {
 	Auth = 'Auth',

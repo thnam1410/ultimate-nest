@@ -17,3 +17,5 @@ Features:
 - [ ]  CICD - Github Action
 - [ ]  ArgoCD
 - [ ]  K8S
+- [ ]  ELK
+- [ ]  Prometheus - Grafana

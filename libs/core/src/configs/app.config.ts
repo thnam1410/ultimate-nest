@@ -7,6 +7,8 @@ import {
 import { registerAs } from '@nestjs/config';
 
 export default registerAs<AppConfigs['app']>('app', () => {
+	const secretKey =
+		process.env.APP_SECRET_KEY ?? 'thjs_js_a_super_str0ng_acc3ss_s3cr3t_k4y';
 	const accessTokenSecret =
 			process.env.JWT_ACCESS_TOKEN_SECRET ??
 			'thjs_js_a_super_str0ng_acc3ss_s3cr3t_k4y',
@@ -18,6 +20,7 @@ export default registerAs<AppConfigs['app']>('app', () => {
 
 	const jwt = validateConfig(
 		{
+			secretKey,
 			accessTokenSecret,
 			refreshTokenSecret,
 			accessTokenExpiredIn,

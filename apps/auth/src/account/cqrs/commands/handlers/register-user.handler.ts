@@ -2,12 +2,12 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { RegisterUserCommand } from '../impl';
 import { CreateResponse, LoginServiceTypes } from '@libs/proto-schema';
-import { AuthDbContextService } from '@libs/orm/prisma-auth/auth-db-context.service';
 import { RpcException } from '@nestjs/microservices';
 import { generateVerificationCode } from '@libs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthServiceTypes } from '@libs/contracts';
 import { UserRegisteredEvent } from '@libs/core/cqrs';
+import { AuthDbContextService } from '@libs/orm/prisma-auth';
 
 @CommandHandler(RegisterUserCommand)
 export class RegisterUserHandler

@@ -1,9 +1,9 @@
-import { AuthDbContextService } from '@libs/orm';
 import { ReadResponse } from '@libs/proto-schema';
 import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcException } from '@nestjs/microservices';
 import { GetUserByIdQuery } from '../impl';
+import { AuthDbContextService } from '@libs/orm/prisma-auth';
 
 @QueryHandler(GetUserByIdQuery)
 export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {

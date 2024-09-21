@@ -14,6 +14,7 @@ export const FACEBOOK_CONFIG_SCHEMA = z.object({
 type FACEBOOK_CONFIG = z.infer<typeof FACEBOOK_CONFIG_SCHEMA>;
 
 export const JWT_CONFIG_SCHEMA = z.object({
+	secretKey: z.string(),
 	accessTokenSecret: z.string().optional(),
 	accessTokenExpiredIn: z.string().optional(),
 	refreshTokenSecret: z.string().optional(),

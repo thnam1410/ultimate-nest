@@ -88,7 +88,7 @@ export class AuthService {
 				secret: this.configService.get('app.jwt.refreshTokenSecret', {
 					infer: true,
 				}),
-				expiresIn: this.configService.get('app.jwt.accessTokenExpiredIn', {
+				expiresIn: this.configService.get('app.jwt.refreshTokenExpiredIn', {
 					infer: true,
 				}),
 			}),

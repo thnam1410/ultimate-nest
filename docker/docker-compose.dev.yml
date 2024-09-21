@@ -1,4 +1,4 @@
-name: ultimate-nest
+name: ultimate-nest-dev
 version: '1'
 services:
   db:
@@ -15,7 +15,7 @@ services:
     image: redis
     restart: always
     ports:
-      - '6379:6379'
+      - '6380:6379'
     volumes:
       - redis_data:/data
 
