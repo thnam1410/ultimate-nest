@@ -1,38 +1,24 @@
-name: ultimate-nest
+name: ultimate-nest-dev
+version: '1'
 services:
-  api-gateway:
-    container_name: api-gateway
-    build:
-      context: .
-      dockerfile: ./apps/api-gateway/Dockerfile
-      tags:
-        - beta
-      args:
-        - APP=api-gateway
-    env_file:
-      - .env
-    environment:
-      REDIS_HOST: host.docker.internal
-    restart: always
-    ports:
-      - 3000:3000
+  # db:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #   ports:
+  #     - '5433:5432' #5433 due to conflict port with existing local postgres
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+  #     - './resources/db:/docker-entrypoint-initdb.d'
 
-  auth:
-    container_name: auth
-    build:
-      context: .
-      dockerfile: ./apps/auth/Dockerfile
-      tags:
-        - beta
-      args:
-        - APP=auth
-    env_file:
-      - .env
-    environment:
-      REDIS_HOST: host.docker.internal
-    restart: always
-    ports:
-      - 3001:3001
+  # redis:
+  #   image: redis
+  #   restart: always
+  #   ports:
+  #     - '6380:6379'
+  #   volumes:
+  #     - redis_data:/data
 
   # broker:
   #   image: bitnami/kafka:latest
@@ -55,12 +41,12 @@ services:
     hostname: elasticsearch
     restart: unless-stopped
     build:
-      context: ./deploys/docker/elasticsearch/
+      context: elasticsearch/
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
-        source: ./deploys/docker/elasticsearch/config/elasticsearch.yml
+        source: ./elasticsearch/config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
       - type: volume
@@ -75,21 +61,23 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
+    networks:
+      - elk
 
   logstash:
     hostname: logstash
     restart: unless-stopped
     build:
-      context: ./deploys/docker/logstash/
+      context: logstash/
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
-        source: ./deploys/docker/logstash/config/logstash.yml
+        source: ./logstash/config/logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./deploys/docker/logstash/pipeline
+        source: ./logstash/pipeline
         target: /usr/share/logstash/pipeline
         read_only: true
     ports:
@@ -99,6 +87,8 @@ services:
       - '9600:9600'
     environment:
       LS_JAVA_OPTS: '-Xmx256m -Xms256m'
+    networks:
+      - elk
     depends_on:
       - elasticsearch
 
@@ -106,23 +96,25 @@ services:
     hostname: kibana
     restart: unless-stopped
     build:
-      context: ./deploys/docker/kibana/
+      context: kibana/
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
-        source: ./deploys/docker/kibana/config/kibana.yml
+        source: ./kibana/config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
         read_only: true
     ports:
       - '5601:5601'
+    networks:
+      - elk
     depends_on:
       - elasticsearch
 
   filebeat:
     image: docker-logs-elk/filebeat:1.0.0
     build:
-      context: ./deploys/docker/filebeat/
+      context: filebeat/
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
@@ -133,6 +125,8 @@ services:
     depends_on:
       - elasticsearch
       - logstash
+    networks:
+      - elk
 
 volumes:
   # db_data:
@@ -152,10 +146,13 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ./deploys/volumes/kafka-dev
+      device: ../volumes/kafka-dev
   elasticsearch:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: ./deploys/volumes/elastic-dev
+      device: ../volumes/elastic-dev
+networks:
+  elk:
+    driver: bridge

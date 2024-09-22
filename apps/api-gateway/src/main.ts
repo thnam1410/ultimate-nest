@@ -1,10 +1,15 @@
-import { NestFactory } from '@nestjs/core';
-import { ApiGatewayModule } from './api-gateway.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { corsOptions, setupSwagger } from '@libs/common';
-import { Logger, VersioningType } from '@nestjs/common';
+import { VersioningType } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { SwaggerModule } from '@nestjs/swagger';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+import { ApiGatewayModule } from './api-gateway.module';
+
 async function bootstrap() {
 	const app = await NestFactory.create(ApiGatewayModule);
+	app.useLogger(app.get(Logger));
+
+	app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
 	app.enableCors(corsOptions);
 
