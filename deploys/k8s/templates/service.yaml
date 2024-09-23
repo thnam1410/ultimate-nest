@@ -8,5 +8,5 @@ spec:
   ports:
     - protocol: TCP
       port: 3000 # Service port
-      targetPort: 3000 # Pod's port where the app is running
+      targetPort: 30000 # Pod's port where the app is running
   type: NodePort
