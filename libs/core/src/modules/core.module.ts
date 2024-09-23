@@ -1,14 +1,17 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import authConfig from '../configs/auth.config';
-import appConfig from '../configs/app.config';
-import { JwtModule } from '@nestjs/jwt';
 import { AppConfigs } from '@libs/common';
+import { JwtModule } from '@nestjs/jwt';
+import appConfig from '../configs/app.config';
+import authConfig from '../configs/auth.config';
+import { AppClsModule, AppLoggerModule } from '../services';
 
 @Global()
 @Module({
 	imports: [
+		AppClsModule,
+		AppLoggerModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
 			load: [appConfig, authConfig],
